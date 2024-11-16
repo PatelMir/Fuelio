@@ -1,26 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 
-// Initialize the Express app
+// Initialize the app
 const app = express();
 
 // Middleware
-app.use(cors()); // Allow cross-origin requests
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data
+app.use(cors());
+app.use(express.json());
 
-// Static Files (optional)
-app.use(express.static(path.join(__dirname, 'public')));
+// Root Route (to fix "Cannot GET /" error)
+app.get('/', (req, res) => {
+  res.send('Welcome to the Express server!');
+});
 
-// Routes
-const exampleRoutes = require('./routes/example');
-app.use('/api/example', exampleRoutes);
-
-// Error Handling Middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something went wrong!');
+// Example API Route
+app.get('/api/message', (req, res) => {
+  res.json({ message: 'Hello from Express!' });
 });
 
 module.exports = app;
